@@ -1,0 +1,27 @@
+{
+  "name": "seek_robot_challenge",
+  "version": "1.0.0",
+  "description": "robot challenge for seek interview",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "seek_robot_challenge": "dist/index.js"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "lint": "eslint . --ext .ts --ignore-pattern dist/**",
+    "lint:fix": "eslint . --ext .ts --ignore-pattern dist/** --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Lawen Thayalakrishnan",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^24.10.2",
+    "eslint": "^9.39.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
+  }
+}
