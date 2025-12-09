@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.autoSave": "afterDelay",
+		"files.exclude": {
+			"dist/": true,
+			"node_modules": true,
+			"coverage": true,
+			"package-lock.json": true
+		},
+		"editor.tabSize": 2
+	}
+}

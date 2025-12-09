@@ -1,0 +1,30 @@
+{
+  "include": [
+    "src/**/*.ts", 
+    "tests/**/*.ts"
+, "misc/graphic_renderer.ts"  ],
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "types": ["node", "jest"],
+
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "sourceMap": true,
+    "declaration": true,
+
+    // optional
+    //"noUnusedLocals": true,
+    //"noImplicitAny": false,
+    //"declarationMap": true,
+    //"verbatimModuleSyntax": true,
+    //"isolatedModules": true,
+  }
+}
