@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "npx tsc",
+    "dev": "tsx src/index.ts",
     "lint": "eslint . --ext .ts --ignore-pattern dist/**",
     "lint:fix": "eslint . --ext .ts --ignore-pattern dist/** --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,6 +22,7 @@
     "@types/node": "^24.10.2",
     "eslint": "^9.39.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0"
   }

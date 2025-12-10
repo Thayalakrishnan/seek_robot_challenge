@@ -3,23 +3,23 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    
+
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "esnext",
     "lib": ["esnext"],
     "types": ["node"],
-    
+
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    
+
     "sourceMap": true,
     "declaration": true,
-    
+
     // optional
     //"noUnusedLocals": true,
-    //"noImplicitAny": true,
+    "noImplicitAny": false,
     //"declarationMap": true,
     //"verbatimModuleSyntax": true,
     //"isolatedModules": true,
