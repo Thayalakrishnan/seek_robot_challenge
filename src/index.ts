@@ -1,14 +1,27 @@
 #!/usr/bin/env node
 
-const DirectionMap = {
+
+type DirArgs = [number, number];
+type PlaceArgs = [number, number, DirArgs];
+type DirectionField = Record<string, DirArgs>;
+type CommandsType = Record<string, number>;
+
+
+const DirectionMap: DirectionField = {
   NORTH: [0, 1],
   WEST: [-1, 0],
   SOUTH: [0, -1],
   EAST: [1, 0],
 }
 
-type DirArgs = [number, number];
-type PlaceArgs = [number, number, DirArgs];
+const ValidCommands: CommandsType = {
+  PLACE: 0,
+  MOVE: 1,
+  REPORT: 2,
+  LEFT: 3,
+  RIGHT: 4,
+  EXIT: 5,
+}
 
 
 class Map {
@@ -23,6 +36,8 @@ class Map {
     console.log(`New Map`);
     console.log(`Map size: width: ${this.width} height: ${this.height}`);
   }
+
+  //validate_placement() {}
 }
 
 
@@ -45,6 +60,7 @@ class Robot {
     console.log(`Robot At: pos_x: ${this.pos_x} pos_y: ${this.pos_y} map: width: ${this.map?.width} height: ${this.map?.height}`);
   }
 }
+
 
 class Game {
   map: Map;
@@ -71,46 +87,26 @@ class Instruction {
   is_valid: boolean;
   place_args: PlaceArgs;
 
-  constructor(command: string, args: string) {
+  constructor(command = "") {
     this.is_valid = true;
     this.command = command;
-    this.args = args;
+    this.args = "";
     this.place_args = [-1, -1, [0, 0]];
   }
 
-  //validate_command() {}
-  //validate_args() {}
-  //process_args() {}
-  //process_command() {}
+  set_args(args: string) {
+    this.args = args;
+  }
 }
 
 
-//class PlaceCommand extends Command {
-//  place_args: [number, number, [number, number]];
-//
-//  constructor(args: [number, number, [number, number]] = [-1, -1, [0, 0]]) {
-//    super("PLACE", "");
-//    this.place_args = args;
-//  }
-//}
+// clean the input
+function clean_input(raw_input: string): [boolean , string] {
+  return [true, raw_input]
+}
 
 
-//class Instruction {
-//  command: string;
-//  args: [];
-//
-//  constructor(key: string, args = []) {
-//    this.command = key;
-//    this.args = args;
-//  }
-//}
-
-
-/**
- * processes the raw input from the command line
- * @param raw_input
- * @returns a tuple of the command and any args
- */
+// processes the raw input from the command line
 function validate_input(raw_input: string): [boolean , string[]] {
   const strings = raw_input.split(" ");
   if ((strings.length > 0) && (strings.length < 3)) {
@@ -120,115 +116,118 @@ function validate_input(raw_input: string): [boolean , string[]] {
 }
 
 
-/**
- * processes the raw input from the command line
- * @param raw_input
- * @returns a tuple of the command and any args
- */
-function process_input(valid_input_arr: string[]): Instruction {
-  const args = valid_input_arr.length == 1 ? "" : valid_input_arr[1];
-  const new_com = new Instruction(valid_input_arr[0], args)
-  return new_com
-}
+// processes the raw input from the command line
+function process_input(valid_input_arr: string[]): [boolean, Instruction] {
+  const command = valid_input_arr[0];
+  const args = valid_input_arr.length > 1 ? valid_input_arr[1] : "";
 
-
-/**
- * processes the command
- * @param raw_command
- * @returns a tuple of the command and any args
- */
-function process_command(valid_command: Instruction): void {
-  valid_command.is_valid = true;
-}
-
-function parse_argument_place(instruction: Instruction): void  {
-    const strings = instruction.args.split(",");
-    if (strings.length === 3) {
-        const x_pos = Number(strings[0]);
-        const y_pos = Number(strings[1]);
-        const dir_str = strings[2];
-        const dir_int = dir_str in DirectionMap ? DirectionMap[dir_str as keyof typeof DirectionMap] : [0, 0];
-
-        instruction.is_valid = true;
-        instruction.place_args = [x_pos, y_pos, dir_int];
+  if (command in ValidCommands) {
+    const instruction = new Instruction(command);
+    if (command === "PLACE") {
+      instruction.set_args(args)
     }
-    instruction.is_valid = false;
+    return [true, instruction]
+  }
+  return [false, new Instruction()]
 }
 
 
-/**
- * processes the argument
- * @param raw_argument
- * @returns a tuple of the command and any args
- * [boolean, [number, number, number[]]]
- */
-function process_argument(instruction: Instruction): void {
-    switch(instruction.command) {
-        case "PLACE":
-          parse_argument_place(instruction);
-          break
-        default:
-            break
-    }
+//
+//function process_command(valid_command: Instruction): void {
+//  valid_command.is_valid = true;
+//}
+
+
+//
+function parse_argument_place(instruction: Instruction): [boolean, PlaceArgs]  {
+  const strings = instruction.args.split(",");
+  if (strings.length === 3) {
+      const x_pos = Number(strings[0]);
+      const y_pos = Number(strings[1]);
+      const dir_str = strings[2];
+      const default_dir: DirArgs = [0,0];
+      const dir_int = dir_str in DirectionMap ? DirectionMap[dir_str] : default_dir;
+      instruction.is_valid = true;
+      return [true, [x_pos, y_pos, dir_int]]
+  }
+  instruction.is_valid = false;
+  return [false, [-1, -1, [0, 0]]]
 }
 
 
+//function handle_command_place(args: [number, number, DirArgs], game: Game): void {
+function handle_command_place(instruction: Instruction, game: Game): void {
+  const [is_valid, porcessed_args] = parse_argument_place(instruction);
 
-function handle_command_place(args: [number, number, DirArgs], game: Game): void {
-    const x_pos = args[0];
-    const y_pos = args[1];
-    const dir = args[2];
+  if (is_valid) {
+    const x_pos = porcessed_args[0];
+    const y_pos = porcessed_args[1];
+    const dir = porcessed_args[2];
 
     game.robot.pos_x = x_pos;
     game.robot.pos_y = y_pos;
     game.robot.direction = dir;
     game.robot.is_placed = true;
 
+    // need to validate the robot can be placed
+  }
 }
 
+
 function handle_command(instruction: Instruction, game: Game): void {
+  if (instruction.command === "PLACE") {
+    // validate placement
+
+    handle_command_place(instruction, game);
+    return
+  }
+  else if (game.robot.is_placed) {
     switch(instruction.command) {
-        case "PLACE":
-            handle_command_place(instruction.place_args, game)
-            return
-        case "LEFT":
-            return
-        default:
-            return
+      case "LEFT":
+          return
+      case "RIGHT":
+          return
+      case "MOVE":
+          return
+      case "REPORT":
+          return
+      case "EXIT":
+          return
+      //default:
+      //    return
     }
+  }
 }
 
 
 function handle_input(game: Game, raw_input: string) {
 
-  // check if the input is valid, correct length
-  // correct number of elements after splitting
-  const [is_valid, validated_input] = validate_input(raw_input);
+  const [is_clean, cleaned_input] = clean_input(raw_input);
 
-  if (is_valid) {
-    // if the nput is valid, we then process it
-    const instruction = process_input(validated_input);
-    process_command(instruction);
+  if (is_clean) {
 
-    // process the command
-    //const [valid_command, command] = process_command(r_command);
+    // check if the input is valid, correct length
+    // correct number of elements after splitting
+    const [is_valid, validated_input] = validate_input(cleaned_input);
 
-    // valid command
-    if (instruction.is_valid) {
+    if (is_valid) {
 
-        process_argument(instruction);
+      // if the nput is valid, we then process it
+      const [is_instruction, instruction] = process_input(validated_input);
 
-        // valid argument
-        if (instruction.is_valid) {
-            // if the robot is placed we process any command
-            if (game.robot.is_placed) {
-                handle_command(instruction, game);
-            }
-            else if (instruction.command === "PLACE") {
-                // validate placement
-                handle_command_place(instruction, game);
-            }
-        }
+      // valid instruction
+      if (is_instruction) {
+
+        // if the robot is placed we process any instruction
+        handle_command(instruction, game);
+
+        //if (game.robot.is_placed) {
+        //}
+        //else if (instruction.command === "PLACE") {
+        //  // validate placement
+        //  handle_command_place(instruction, game);
+        //}
+      }
     }
   }
 }
