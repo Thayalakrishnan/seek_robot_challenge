@@ -23,28 +23,31 @@ export const ValidCommands: CommandsType = {
 }
 
 
-abstract class BaseCommand {
+export abstract class BaseCommand {
   public readonly name: string;
-  public args: string;
-  public is_valid: boolean;
   public uses_args: boolean;
 
   constructor(name = "", uses_args = false) {
     this.name = name;
-    this.args = "";
-    this.is_valid = true;
     this.uses_args = uses_args;
   }
 
-  public set_args(args: string) {
-    this.args = args;
-  }
-
-  public abstract execute(game: Game, args: string): void;
+  public abstract execute(args: string, game: Game): void;
 }
 
 
-class PlaceCommand extends BaseCommand {
+export class NullCommand extends BaseCommand {
+
+  constructor() {
+      super('NULL');
+  }
+
+  public execute(): void {
+    return
+  }
+}
+
+export class PlaceCommand extends BaseCommand {
 
   constructor() {
       super('PLACE', true);
@@ -59,20 +62,23 @@ class PlaceCommand extends BaseCommand {
         const default_dir: [number, number, string] = [0, 0, "🟦"];
         const direction = dir_str in DirectionDict ? DirectionDict[dir_str] : default_dir;
 
-        game.robot.pos_x = x_pos;
-        game.robot.pos_y = y_pos;
-        game.robot.direction = direction;
-        game.robot.is_placed = true;
         // need to validate the robot can be placed
+        if (game.table.is_within_table(x_pos, y_pos)) {
+          game.robot.pos_x = x_pos;
+          game.robot.pos_y = y_pos;
+          game.robot.direction = direction;
+          game.robot.is_placed = true;
+        }
     }
     return
   }
 }
 
 
-class CommandRegistry {
+export class CommandRegistry {
 
   private commandDict = new Map<string, BaseCommand>;
+  private nullCommand = new NullCommand();
 
   public getDict(): Map<string, BaseCommand> {
     return this.commandDict
@@ -82,27 +88,11 @@ class CommandRegistry {
     this.commandDict.set(commandInstance.name, commandInstance);
   }
 
-  public getCommand(name: string): BaseCommand | undefined {
-    return this.commandDict.get(name);
+  public getCommand(name = "NULL"): BaseCommand {
+    const command: BaseCommand = this.commandDict.get(name) ?? this.nullCommand;
+    return command
   }
 }
 
 
-
-export class Command {
-  command: string;
-  args: string;
-  is_valid: boolean;
-
-  constructor(command = "") {
-    this.is_valid = true;
-    this.command = command;
-    this.args = "";
-  }
-
-  set_args(args: string) {
-    this.args = args;
-  }
-}
-
-export default Command
+export default BaseCommand

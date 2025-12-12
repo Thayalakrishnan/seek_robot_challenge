@@ -1,16 +1,18 @@
-import { Command, ValidCommands } from "./commands.js";
+import { CommandRegistry, PlaceCommand, BaseCommand } from "./commands.js";
 
 
 abstract class Reader {
-  //abstract clean(): string;
-  //abstract validate(): string;
-  //abstract process(): string;
-
-  public abstract read(raw_input: string): Command;
+  public abstract read(raw_input: string): [BaseCommand, string];
 }
 
 
 export class CommandLineReader implements Reader {
+
+  public registry = new CommandRegistry();
+
+  constructor() {
+    this.registry.register(new PlaceCommand())
+  }
 
   private clean_input(raw_input: string): [boolean , string] {
     return [true, raw_input]
@@ -24,22 +26,14 @@ export class CommandLineReader implements Reader {
     return [false, strings]
   }
 
-  private process_input(valid_input_arr: string[]): [boolean, Command] {
+  private process_input(valid_input_arr: string[]): [BaseCommand, string] {
     const raw_command = valid_input_arr[0];
     const args = valid_input_arr.length > 1 ? valid_input_arr[1] : "";
-
-    if (raw_command in ValidCommands) {
-      const command = new Command(raw_command);
-      if (raw_command === "PLACE") {
-        command.set_args(args)
-      }
-      return [true, command]
-    }
-    return [false, new Command()]
+    const command = this.registry.getCommand(raw_command);
+    return [command, args]
   }
 
-
-  public read(raw_input: string): Command {
+  public read(raw_input: string): [BaseCommand, string] {
     const [is_clean, cleaned_input] = this.clean_input(raw_input);
 
     if (is_clean) {
@@ -47,16 +41,10 @@ export class CommandLineReader implements Reader {
       const [is_valid, validated_input] = this.validate_input(cleaned_input);
 
       if (is_valid) {
-
-        const [is_command, command] = this.process_input(validated_input);
-
-        if (is_command) {
-          return command;
-        }
+        return this.process_input(validated_input);
       }
     }
-    //throw new Error("Invalid Input");
-    return new Command("NULL")
+    return [this.registry.getCommand("NULL"), ""]
   }
 }
 
