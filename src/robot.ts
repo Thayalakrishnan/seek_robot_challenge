@@ -1,23 +1,23 @@
-export type DirArgs = [number, number, string];
-
 
 export class Robot {
   public pos_x: number;
   public pos_y: number;
-  public direction: DirArgs;
+  public direction: string;
   public is_placed: boolean;
+  public tile: string;
 
-  constructor(x = -1, y = -1, direction:DirArgs = [0, 0, "🟦"]) {
+  constructor() {
     this.is_placed = false;
-    this.pos_x = x;
-    this.pos_y = y;
-    this.direction = direction;
+    this.pos_x = -1;
+    this.pos_y = -1;
+    this.direction = "NONE";
+    this.tile = "🟦";
 
     console.log(`[Robot][constructor] pos_x: ${this.pos_x} pos_y: ${this.pos_y}`);
   }
 
   get_tile(): string {
-    return this.direction[2]
+    return this.tile
   }
 }
 

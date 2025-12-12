@@ -10,8 +10,7 @@ export class Renderer {
   }
 
   print_frame(game: Game): void {
-    console.log("------------");
-    for (let j = 0; j < game.table.height; j++) {
+    for (let j = game.table.height - 1; j >= 0; j--) {
       const row: string[] = [];
       if (j===game.robot.pos_y) {
         for (let i = 0; i < game.table.width; i++) {
@@ -26,5 +25,6 @@ export class Renderer {
       }
       console.log(row.join(''));
     }
+    console.log("------------");
   }
 }

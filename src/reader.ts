@@ -1,7 +1,7 @@
-import { CommandRegistry, PlaceCommand, BaseCommand } from "./commands.js";
+import { CommandRegistry, PlaceCommand, BaseCommand, MoveCommand, ReportCommand } from "./commands.js";
 
 
-abstract class Reader {
+export abstract class Reader {
   public abstract read(raw_input: string): [BaseCommand, string];
 }
 
@@ -11,7 +11,9 @@ export class CommandLineReader implements Reader {
   public registry = new CommandRegistry();
 
   constructor() {
+    this.registry.register(new ReportCommand())
     this.registry.register(new PlaceCommand())
+    this.registry.register(new MoveCommand())
   }
 
   private clean_input(raw_input: string): [boolean , string] {
