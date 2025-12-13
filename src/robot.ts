@@ -1,35 +1,15 @@
-
-//export class Entity {
-//  public readonly name: string;
-//  public pos_x: number;
-//  public pos_y: number;
-//  public direction: string;
-//
-//  constructor(name = "", uses_args = false) {
-//    this.name = name;
-//    this.uses_args = uses_args;
-//  }
-//
-//  public getPosition(): void;
-//}
+import { Position  } from "./position.js";
 
 
 export class Robot {
-  public pos_x: number;
-  public pos_y: number;
-  public direction: string;
-
+  public position: Position;
   public is_placed: boolean;
   public tile: string;
 
   constructor() {
-    this.is_placed = false;
-    this.pos_x = -1;
-    this.pos_y = -1;
-    this.direction = "";
     this.tile = "🟦";
-
-    console.log(`[Robot][constructor] pos_x: ${this.pos_x} pos_y: ${this.pos_y}`);
+    this.position = new Position(-1, -1, "");
+    this.is_placed = false;
   }
 
   get_tile(): string {
@@ -39,7 +19,9 @@ export class Robot {
   set_tile(tile: string): void {
     this.tile = tile;
   }
+  
+  updatePosition(position: Position): void {
+    this.position = position;
+    this.is_placed = true;
+  }
 }
-
-
-export default Robot

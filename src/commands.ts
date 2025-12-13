@@ -1,5 +1,6 @@
 import Game from "./game.js";
 import { DirectionManager } from "./directions.js";
+import { Position } from "./position.js";
 
 
 export abstract class BaseCommand {
@@ -33,12 +34,10 @@ export class ReportCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const pos_x_cur = game.robot.pos_x;
-    const pos_y_cur = game.robot.pos_y;
-    const dir_cur = game.robot.direction
-    console.log(`[REPORT] position: ${pos_x_cur}, ${pos_y_cur} direction: ${dir_cur}`);
-    console.log(`Output: ${pos_x_cur},${pos_y_cur},${dir_cur}`);
-    return
+    const x = game.robot.position.x;
+    const y = game.robot.position.y;
+    const direction = game.robot.position.direction;
+    console.log(`Output: ${x},${y},${direction}`);
   }
 }
 
@@ -53,18 +52,19 @@ export class PlaceCommand extends BaseCommand {
   public execute(args: string, game: Game): void {
     const strings = args.split(",");
     if (strings.length === 3) {
+      
         const x_pos = Number(strings[0]);
         const y_pos = Number(strings[1]);
         const direction = strings[2];
+        
+        const newPosition = new Position(x_pos, y_pos, direction);
 
         // need to validate the robot can be placed
-        if (game.table.is_within_table(x_pos, y_pos)) {
-          game.robot.pos_x = x_pos;
-          game.robot.pos_y = y_pos;
-          game.robot.direction = direction;
-          game.robot.is_placed = true;
+        if (game.validMovement(newPosition)) {
+          game.robot.updatePosition(newPosition);
+          
           // get rid of this
-          game.robot.tile = this.directionManager.getDirection(game.robot.direction).tile;
+          game.robot.tile = this.directionManager.getDirection(game.robot.position.direction).tile;
 
         }
     }
@@ -84,16 +84,16 @@ export class MoveCommand extends BaseCommand {
   public execute(args: string, game: Game): void {
     const move_amount = 1;
 
-    const pos_x_cur = game.robot.pos_x;
-    const pos_y_cur = game.robot.pos_y;
+    const pos_x_cur = game.robot.position.x;
+    const pos_y_cur = game.robot.position.y;
 
     const [pos_x_new, pos_y_new] = this.directionManager.movePosition(
-      move_amount, game.robot.pos_x, game.robot.pos_y, game.robot.direction
+      move_amount, game.robot.position.x, game.robot.position.y, game.robot.position.direction
     );
 
     if (game.table.is_within_table(pos_x_new, pos_y_new)) {
-      game.robot.pos_x = pos_x_new;
-      game.robot.pos_y = pos_y_new;
+      game.robot.position.x = pos_x_new;
+      game.robot.position.y = pos_y_new;
       console.log(`[MOVE] moving  ${pos_x_cur}, ${pos_y_cur} --> ${pos_x_new}, ${pos_y_new}`);
     } else {
       console.log(`[MOVE] cant move ${pos_x_cur}, ${pos_y_cur} --> ${pos_x_new}, ${pos_y_new}`);
@@ -111,9 +111,9 @@ export class RightCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const dir_new = this.directionManager.rotateRight(game.robot.direction);
-    console.log(`[RIGHT] ${game.robot.direction} --> ${dir_new.name}`);
-    game.robot.direction = dir_new.name;
+    const dir_new = this.directionManager.rotateRight(game.robot.position.direction);
+    console.log(`[RIGHT] ${game.robot.position.direction} --> ${dir_new.name}`);
+    game.robot.position.direction = dir_new.name;
     game.robot.tile = dir_new.tile;
     return
   }
@@ -128,9 +128,9 @@ export class LeftCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const dir_new = this.directionManager.rotateLeft(game.robot.direction);
-    console.log(`[LEFT] ${game.robot.direction} --> ${dir_new.name}`);
-    game.robot.direction = dir_new.name;
+    const dir_new = this.directionManager.rotateLeft(game.robot.position.direction);
+    console.log(`[LEFT] ${game.robot.position.direction} --> ${dir_new.name}`);
+    game.robot.position.direction = dir_new.name;
     game.robot.tile = dir_new.tile;
     return
   }

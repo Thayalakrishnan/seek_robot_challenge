@@ -6,7 +6,6 @@ export class Table {
   constructor(x = 5, y = 5) {
     this.width = x;
     this.height = y;
-    console.log(`[Table][constructor] width: ${this.width} height: ${this.height}`);
   }
 
   is_within_table(x = 0, y = 0) {

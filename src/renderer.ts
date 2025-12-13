@@ -6,15 +6,14 @@ export class Renderer {
   tile = "🟥";
 
   constructor() {
-    console.log(`[Renderer][constructor] robot: ${this.robot} tile: ${this.tile}`);
   }
 
   print_frame(game: Game): void {
     for (let j = game.table.height - 1; j >= 0; j--) {
       const row: string[] = [];
-      if (j===game.robot.pos_y) {
+      if (j===game.robot.position.y) {
         for (let i = 0; i < game.table.width; i++) {
-          if (i===game.robot.pos_x) {
+          if (i===game.robot.position.x) {
             row.push(game.robot.get_tile());
           } else {
             row.push(this.tile);
