@@ -8,14 +8,14 @@ import { Renderer } from "./renderer.js";
 import { Evaluator } from "./evaluator.js";
 
 
-function step(commandAsText:string, reader: Reader, evaluator: Evaluator, renderer: Renderer, game: Game) {
+function step(commandAsText:string, reader: Reader, evaluator: Evaluator, game: Game) {
   // the reader, reads the input, returns a command
   const [command, args] = reader.read(commandAsText);
-  console.log(`[step1] parsed command: ${command.name}`)
+  console.log(`[step] parsed command: ${command.name}`)
   // the evaluator evaluates the command
   evaluator.evaluate(command, args, game);
-  // the renderer outputs the results
-  renderer.print_frame(game);
+  //// the renderer outputs the results
+  //renderer.print_frame(game);
 }
 
 
@@ -29,10 +29,29 @@ function main() {
   const robot = new Robot();
   const game = new Game(table, robot);
 
-  step("PLACE 1,2,NORTH", reader, evaluator, renderer, game);
-  step("REPORT", reader, evaluator, renderer, game);
-  step("MOVE", reader, evaluator, renderer, game);
-  step("REPORT", reader, evaluator, renderer, game);
+  step("PLACE 1,2,NORTH", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("MOVE", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("RIGHT", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("LEFT", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("LEFT", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("MOVE", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
 
   console.log("Done");
 }

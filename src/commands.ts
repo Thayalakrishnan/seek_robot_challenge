@@ -1,65 +1,5 @@
 import Game from "./game.js";
-
-export type DirArgs = [number, number, string];
-export type CommandsType = Record<string, number>;
-type DirectionField = Record<string, DirArgs>;
-
-
-const DirectionDict: DirectionField = {
-  NONE: [0, 0, "🟦"],
-  NORTH: [0, 1, "⏫"],
-  WEST: [-1, 0, "⏪"],
-  SOUTH: [0, -1, "⏬"],
-  EAST: [1, 0, "⏩"],
-}
-
-export class Direction {
-  public name: string;
-  public i: number;
-  public j: number;
-  public tile: string;
-
-  constructor(name = "", i = 0, j = 0, tile = "") {
-    this.name = name;
-    this.i = i;
-    this.j = j;
-    this.tile = tile;
-  }
-}
-
-export class DirectionManager {
-
-  private dirDict = new Map<string, Direction>;
-  private nullDirection = new Direction("NONE", 0, 0, "🟦");
-
-  constructor() {
-    this.dirDict.set("NORTH", new Direction("NORTH", 0, 1, "⏫"));
-    this.dirDict.set("WEST", new Direction("WEST", -1, 0, "⏪"));
-    this.dirDict.set("SOUTH", new Direction("SOUTH", 0, -1, "⏫"));
-    this.dirDict.set("EAST", new Direction("EAST", 1, 0, "⏩"));
-    this.dirDict.set(this.nullDirection.name, this.nullDirection);
-  }
-
-  //public register(commandInstance: BaseCommand): void {
-  //  this.dirDict.set(commandInstance.name, commandInstance);
-  //}
-
-  public getDirection(name = "NULL"): Direction {
-    const direction: Direction = this.dirDict.get(name) ?? this.nullDirection;
-    return direction
-  }
-}
-
-
-
-export const ValidCommands: CommandsType = {
-  PLACE: 0,
-  MOVE: 1,
-  REPORT: 2,
-  LEFT: 3,
-  RIGHT: 4,
-  EXIT: 5,
-}
+import { DirectionManager } from "./directions.js";
 
 
 export abstract class BaseCommand {
@@ -103,6 +43,8 @@ export class ReportCommand extends BaseCommand {
 
 export class PlaceCommand extends BaseCommand {
 
+  public directionManager = new DirectionManager();
+
   constructor() {
       super('PLACE', true);
   }
@@ -120,6 +62,9 @@ export class PlaceCommand extends BaseCommand {
           game.robot.pos_y = y_pos;
           game.robot.direction = direction;
           game.robot.is_placed = true;
+          // get rid of this
+          game.robot.tile = this.directionManager.getDirection(game.robot.direction).tile;
+
         }
     }
     return
@@ -128,6 +73,8 @@ export class PlaceCommand extends BaseCommand {
 
 
 export class MoveCommand extends BaseCommand {
+
+  public directionManager = new DirectionManager();
 
   constructor() {
       super('MOVE', false);
@@ -138,10 +85,10 @@ export class MoveCommand extends BaseCommand {
 
     const pos_x_cur = game.robot.pos_x;
     const pos_y_cur = game.robot.pos_y;
+    const dir_cur = this.directionManager.getDirection(game.robot.direction);
 
-    const dir_cur = DirectionDict[game.robot.direction] ?? [0, 0, "🟦"];
-    const dir_x_cur = dir_cur[0];
-    const dir_y_cur = dir_cur[1];
+    const dir_x_cur = dir_cur.i;
+    const dir_y_cur = dir_cur.j;
 
     const pos_x_new = pos_x_cur + dir_x_cur*move_amount;
     const pos_y_new = pos_y_cur + dir_y_cur*move_amount;
@@ -156,6 +103,42 @@ export class MoveCommand extends BaseCommand {
     return
   }
 }
+
+export class RightCommand extends BaseCommand {
+
+  public directionManager = new DirectionManager();
+
+  constructor() {
+      super('RIGHT', false);
+  }
+
+  public execute(args: string, game: Game): void {
+    const dir_new = this.directionManager.rotateRight(game.robot.direction);
+    console.log(`[RIGHT] ${game.robot.direction} --> ${dir_new.name}`);
+    game.robot.direction = dir_new.name;
+    game.robot.tile = dir_new.tile;
+
+    return
+  }
+}
+
+export class LeftCommand extends BaseCommand {
+
+  public directionManager = new DirectionManager();
+
+  constructor() {
+      super('LEFT', false);
+  }
+
+  public execute(args: string, game: Game): void {
+    const dir_new = this.directionManager.rotateLeft(game.robot.direction);
+    console.log(`[LEFT] ${game.robot.direction} --> ${dir_new.name}`);
+    game.robot.direction = dir_new.name;
+    game.robot.tile = dir_new.tile;
+    return
+  }
+}
+
 
 
 export class CommandRegistry {
