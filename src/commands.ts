@@ -83,21 +83,8 @@ export class MoveCommand extends BaseCommand {
 
   public execute(args: string, game: Game): void {
     const move_amount = 1;
-
-    const pos_x_cur = game.robot.position.x;
-    const pos_y_cur = game.robot.position.y;
-
-    const [pos_x_new, pos_y_new] = this.directionManager.movePosition(
-      move_amount, game.robot.position.x, game.robot.position.y, game.robot.position.direction
-    );
-
-    if (game.table.is_within_table(pos_x_new, pos_y_new)) {
-      game.robot.position.x = pos_x_new;
-      game.robot.position.y = pos_y_new;
-      console.log(`[MOVE] moving  ${pos_x_cur}, ${pos_y_cur} --> ${pos_x_new}, ${pos_y_new}`);
-    } else {
-      console.log(`[MOVE] cant move ${pos_x_cur}, ${pos_y_cur} --> ${pos_x_new}, ${pos_y_new}`);
-    }
+    const newPosition = this.directionManager.movePosition(move_amount, game.robot.position);
+    game.updateIfValidMovement(newPosition);
     return
   }
 }
@@ -112,7 +99,6 @@ export class RightCommand extends BaseCommand {
 
   public execute(args: string, game: Game): void {
     const dir_new = this.directionManager.rotateRight(game.robot.position.direction);
-    console.log(`[RIGHT] ${game.robot.position.direction} --> ${dir_new.name}`);
     game.robot.position.direction = dir_new.name;
     game.robot.tile = dir_new.tile;
     return
@@ -129,7 +115,6 @@ export class LeftCommand extends BaseCommand {
 
   public execute(args: string, game: Game): void {
     const dir_new = this.directionManager.rotateLeft(game.robot.position.direction);
-    console.log(`[LEFT] ${game.robot.position.direction} --> ${dir_new.name}`);
     game.robot.position.direction = dir_new.name;
     game.robot.tile = dir_new.tile;
     return

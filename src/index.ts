@@ -28,44 +28,52 @@ function main() {
   const robot = new Robot();
   const game = new Game(table, robot);
 
-  step("PLACE 1,2,NORTH", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
+  step("PLACE 0,0,EAST", reader, evaluator, game);
   renderer.print_frame(game);
 
   step("MOVE", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
   renderer.print_frame(game);
-
-  step("RIGHT", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
+  step("MOVE", reader, evaluator, game);
   renderer.print_frame(game);
-
-  step("LEFT", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
   renderer.print_frame(game);
 
   step("LEFT", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+  
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
   renderer.print_frame(game);
 
   step("LEFT", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
   renderer.print_frame(game);
+  
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  
+  step("LEFT", reader, evaluator, game);
+  renderer.print_frame(game);  
 
   step("MOVE", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
   renderer.print_frame(game);
-
-  step("PLACE 4,4,NORTH", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
-  renderer.print_frame(game);
-
-  step("PLACE 5,5,NORTH", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
-  renderer.print_frame(game);
-
   step("MOVE", reader, evaluator, game);
-  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.print_frame(game);
+  step("MOVE", reader, evaluator, game);
   renderer.print_frame(game);
 
   console.log("Done");

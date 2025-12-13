@@ -1,3 +1,4 @@
+import { Position } from "./position.js";
 
 export class Direction {
   static directionIndex = 0;
@@ -21,6 +22,7 @@ export class Direction {
 
 export class DirectionManager {
 
+  private moveAmount = 1;
   private dirDict = new Map<string, Direction>;
   private nullDirection = new Direction("NULL", 0, 0, 0, "🟦");
 
@@ -42,32 +44,65 @@ export class DirectionManager {
     return direction
   }
 
-  public rotateDirection(currentDirectionName = "", rotation: number): Direction {
+  public rotate(position: Position, rotation: number): Position {
     const length = this.dirDict.size;
     const keys = [...this.dirDict.keys()];
-    const cur_pos = keys.indexOf(currentDirectionName);
+    const cur_pos = keys.indexOf(position.direction);
     const new_pos = (cur_pos + rotation) % length;
     const cur_dir = this.dirDict.get(keys[new_pos]) ?? this.nullDirection;
-    return cur_dir
+    return new Position(position.x, position.y, cur_dir.name)
   }
 
-  public rotateRight(currentDirectionName = ""): Direction {
-    return this.rotateDirection(currentDirectionName, -1)
+  public rotateRight(position: Position): Position {
+    return this.rotate(position, -1)
   }
 
-  public rotateLeft(currentDirectionName = ""): Direction {
-    return this.rotateDirection(currentDirectionName, 1)
+  public rotateLeft(position: Position): Position {
+    return this.rotate(position, 1)
   }
 
-  public movePosition(moveAmount = 0, currentPositionX = -1, currentPositionY = -1, currentDirectionName = ""): [number, number] {
-    const dir_cur = this.getDirection(currentDirectionName);
-    const dir_x_cur = dir_cur.i;
-    const dir_y_cur = dir_cur.j;
-    const pos_x_new = currentPositionX + dir_x_cur*moveAmount;
-    const pos_y_new = currentPositionY + dir_y_cur*moveAmount;
-    return [pos_x_new, pos_y_new]
+  public move(moveAmount = 0, position: Position): Position {
+    const currentDirection = this.getDirection(position.direction);
+    const horizontalTranslation = currentDirection.i;
+    const verticalTranslation = currentDirection.j;
+    const newX = position.x + horizontalTranslation*moveAmount;
+    const newY = position.y + verticalTranslation*moveAmount;
+    return new Position(newX, newY, currentDirection.name);
+  }
+  
+  
+  public moveVertical(position: Position, sign: number): Position {
+    const newY = position.y + this.moveAmount*sign;
+    return new Position(position.x, newY, position.direction);
+  }
+  
+  public moveHorizontal(position: Position, sign: number): Position {
+    const newX = position.x + this.moveAmount*sign;
+    return new Position(newX, position.y, position.direction);
+  }
+  
+  public moveWest(position: Position): Position {
+    return this.moveHorizontal(position, -1);
+  }
+  
+  public moveEast(position: Position): Position {
+    return this.moveHorizontal(position, 1);
+  }
+  
+  public moveNorth(position: Position): Position {
+    return this.moveVertical(position, 1);
+  }
+  
+  public moveSouth(position: Position): Position {
+    return this.moveVertical(position, -1);
+  }
+  
+  public movePosition(position: Position): Position {
+    const currentDirection = this.getDirection(position.direction);
+    const horizontalTranslation = currentDirection.i;
+    const verticalTranslation = currentDirection.j;
+    const newX = position.x + horizontalTranslation*this.moveAmount;
+    const newY = position.y + verticalTranslation*this.moveAmount;
+    return new Position(newX, newY, currentDirection.name);
   }
 }
-
-
-export default DirectionManager
