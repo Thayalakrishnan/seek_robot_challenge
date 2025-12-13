@@ -12,15 +12,20 @@
     "dev": "tsx src/index.ts",
     "lint": "eslint . --ext .ts --ignore-pattern dist/**",
     "lint:fix": "eslint . --ext .ts --ignore-pattern dist/** --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration"
   },
   "keywords": [],
   "author": "Lawen Thayalakrishnan",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.10.2",
     "eslint": "^9.39.1",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",

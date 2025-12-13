@@ -37,6 +37,7 @@ export class ReportCommand extends BaseCommand {
     const pos_y_cur = game.robot.pos_y;
     const dir_cur = game.robot.direction
     console.log(`[REPORT] position: ${pos_x_cur}, ${pos_y_cur} direction: ${dir_cur}`);
+    console.log(`Output: ${pos_x_cur},${pos_y_cur},${dir_cur}`);
     return
   }
 }
@@ -85,13 +86,10 @@ export class MoveCommand extends BaseCommand {
 
     const pos_x_cur = game.robot.pos_x;
     const pos_y_cur = game.robot.pos_y;
-    const dir_cur = this.directionManager.getDirection(game.robot.direction);
 
-    const dir_x_cur = dir_cur.i;
-    const dir_y_cur = dir_cur.j;
-
-    const pos_x_new = pos_x_cur + dir_x_cur*move_amount;
-    const pos_y_new = pos_y_cur + dir_y_cur*move_amount;
+    const [pos_x_new, pos_y_new] = this.directionManager.movePosition(
+      move_amount, game.robot.pos_x, game.robot.pos_y, game.robot.direction
+    );
 
     if (game.table.is_within_table(pos_x_new, pos_y_new)) {
       game.robot.pos_x = pos_x_new;
@@ -117,7 +115,6 @@ export class RightCommand extends BaseCommand {
     console.log(`[RIGHT] ${game.robot.direction} --> ${dir_new.name}`);
     game.robot.direction = dir_new.name;
     game.robot.tile = dir_new.tile;
-
     return
   }
 }

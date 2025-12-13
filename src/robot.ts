@@ -1,8 +1,24 @@
 
+//export class Entity {
+//  public readonly name: string;
+//  public pos_x: number;
+//  public pos_y: number;
+//  public direction: string;
+//
+//  constructor(name = "", uses_args = false) {
+//    this.name = name;
+//    this.uses_args = uses_args;
+//  }
+//
+//  public getPosition(): void;
+//}
+
+
 export class Robot {
   public pos_x: number;
   public pos_y: number;
   public direction: string;
+
   public is_placed: boolean;
   public tile: string;
 

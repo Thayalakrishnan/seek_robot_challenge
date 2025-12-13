@@ -11,7 +11,6 @@ import { Evaluator } from "./evaluator.js";
 function step(commandAsText:string, reader: Reader, evaluator: Evaluator, game: Game) {
   // the reader, reads the input, returns a command
   const [command, args] = reader.read(commandAsText);
-  console.log(`[step] parsed command: ${command.name}`)
   // the evaluator evaluates the command
   evaluator.evaluate(command, args, game);
   //// the renderer outputs the results
@@ -46,6 +45,22 @@ function main() {
   renderer.print_frame(game);
 
   step("LEFT", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("LEFT", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("MOVE", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("PLACE 4,4,NORTH", reader, evaluator, game);
+  step("REPORT", reader, evaluator, game);
+  renderer.print_frame(game);
+
+  step("PLACE 5,5,NORTH", reader, evaluator, game);
   step("REPORT", reader, evaluator, game);
   renderer.print_frame(game);
 

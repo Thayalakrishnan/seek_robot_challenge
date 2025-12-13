@@ -25,20 +25,12 @@ export class DirectionManager {
   private nullDirection = new Direction("NULL", 0, 0, 0, "🟦");
 
   constructor() {
-    //this.dirDict.set("EAST", new Direction("EAST", 1, 0, "⏩"));
-    //this.dirDict.set("NORTH", new Direction("NORTH", 0, 1, "⏫"));
-    //this.dirDict.set("WEST", new Direction("WEST", -1, 0, "⏪"));
-    //this.dirDict.set("SOUTH", new Direction("SOUTH", 0, -1, "⏬"));
     this.addDirection("EAST", 0, 1, 0, "⏩");
     this.addDirection("NORTH", 1, 0, 1, "⏫");
     this.addDirection("WEST", 2, -1, 0, "⏪");
     this.addDirection("SOUTH", 3, 0, -1, "⏬");
     //this.dirDict.set(this.nullDirection.name, this.nullDirection);
   }
-
-  //public register(commandInstance: BaseCommand): void {
-  //  this.dirDict.set(commandInstance.name, commandInstance);
-  //}
 
   public addDirection(name = "", index = 0, i = 0, j = 0, tile = ""): void {
     const newDirection = new Direction(name, index, i, j, tile)
@@ -65,6 +57,15 @@ export class DirectionManager {
 
   public rotateLeft(currentDirectionName = ""): Direction {
     return this.rotateDirection(currentDirectionName, 1)
+  }
+
+  public movePosition(moveAmount = 0, currentPositionX = -1, currentPositionY = -1, currentDirectionName = ""): [number, number] {
+    const dir_cur = this.getDirection(currentDirectionName);
+    const dir_x_cur = dir_cur.i;
+    const dir_y_cur = dir_cur.j;
+    const pos_x_new = currentPositionX + dir_x_cur*moveAmount;
+    const pos_y_new = currentPositionY + dir_y_cur*moveAmount;
+    return [pos_x_new, pos_y_new]
   }
 }
 
