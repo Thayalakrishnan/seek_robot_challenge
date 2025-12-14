@@ -1,5 +1,8 @@
 {
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": [
+    "src/**/*.ts", 
+    "tests/**/*.ts"
+  ],
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
