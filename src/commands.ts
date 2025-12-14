@@ -1,18 +1,32 @@
-import Game from "./game.js";
+import { Game } from "./game.js";
 import { DirectionManager } from "./directions.js";
 import { Position } from "./position.js";
 
 
 export abstract class BaseCommand {
   public readonly name: string;
-  public uses_args: boolean;
+  public usesArgs: boolean;
+  public args: string;
 
-  constructor(name = "", uses_args = false) {
+  constructor(name = "", usesArgs = false) {
     this.name = name;
-    this.uses_args = uses_args;
+    this.usesArgs = usesArgs;
+    this.args = "";
   }
-
+  
   public abstract execute(args: string, game: Game): void;
+
+  public parseArgs(args: string): string {
+    return args
+  };
+  
+  public setArgs(args: string): void {
+    // throw an error here for invalid args?
+    if (this.usesArgs) {
+      this.args = this.parseArgs(args);
+    }
+  };
+  
 }
 
 
@@ -27,6 +41,7 @@ export class NullCommand extends BaseCommand {
   }
 }
 
+
 export class ReportCommand extends BaseCommand {
 
   constructor() {
@@ -34,12 +49,11 @@ export class ReportCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const x = game.robot.position.x;
-    const y = game.robot.position.y;
-    const direction = game.robot.position.direction;
-    console.log(`Output: ${x},${y},${direction}`);
+    const position = game.robot.position;
+    console.log(`Output: ${position.x},${position.y},${position.direction}`);
   }
 }
+
 
 export class PlaceCommand extends BaseCommand {
 
@@ -53,19 +67,17 @@ export class PlaceCommand extends BaseCommand {
     const strings = args.split(",");
     if (strings.length === 3) {
       
-        const x_pos = Number(strings[0]);
-        const y_pos = Number(strings[1]);
+        const xPos = Number(strings[0]);
+        const yPos = Number(strings[1]);
         const direction = strings[2];
         
-        const newPosition = new Position(x_pos, y_pos, direction);
+        const newPosition = new Position(xPos, yPos, direction);
 
-        // need to validate the robot can be placed
         if (game.validMovement(newPosition)) {
           game.robot.updatePosition(newPosition);
           
           // get rid of this
           game.robot.tile = this.directionManager.getDirection(game.robot.position.direction).tile;
-
         }
     }
     return
@@ -82,12 +94,11 @@ export class MoveCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const move_amount = 1;
-    const newPosition = this.directionManager.movePosition(move_amount, game.robot.position);
+    const newPosition = this.directionManager.move(game.robot.position);
     game.updateIfValidMovement(newPosition);
-    return
   }
 }
+
 
 export class RightCommand extends BaseCommand {
 
@@ -98,12 +109,11 @@ export class RightCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const dir_new = this.directionManager.rotateRight(game.robot.position.direction);
-    game.robot.position.direction = dir_new.name;
-    game.robot.tile = dir_new.tile;
-    return
+    const newPosition = this.directionManager.rotateRight(game.robot.position);
+    game.robot.updatePosition(newPosition);
   }
 }
+
 
 export class LeftCommand extends BaseCommand {
 
@@ -114,13 +124,10 @@ export class LeftCommand extends BaseCommand {
   }
 
   public execute(args: string, game: Game): void {
-    const dir_new = this.directionManager.rotateLeft(game.robot.position.direction);
-    game.robot.position.direction = dir_new.name;
-    game.robot.tile = dir_new.tile;
-    return
+    const newPosition = this.directionManager.rotateLeft(game.robot.position);
+    game.robot.updatePosition(newPosition);
   }
 }
-
 
 
 export class CommandRegistry {
@@ -128,19 +135,11 @@ export class CommandRegistry {
   private commandDict = new Map<string, BaseCommand>;
   private nullCommand = new NullCommand();
 
-  public getDict(): Map<string, BaseCommand> {
-    return this.commandDict
-  }
-
   public register(commandInstance: BaseCommand): void {
     this.commandDict.set(commandInstance.name, commandInstance);
   }
 
   public getCommand(name = "NULL"): BaseCommand {
-    const command: BaseCommand = this.commandDict.get(name) ?? this.nullCommand;
-    return command
+    return this.commandDict.get(name) ?? this.nullCommand
   }
 }
-
-
-export default BaseCommand

@@ -8,13 +8,10 @@ export class Table {
     this.height = y;
   }
 
-  is_within_table(x = 0, y = 0) {
+  isWithinTable(x = 0, y = 0) {
     return (
       (x >= 0) && (x < this.width) &&
       (y >= 0) && (y < this.height)
     )
   }
 }
-
-
-export default Table

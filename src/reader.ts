@@ -11,7 +11,7 @@ import {
 
 
 export abstract class Reader {
-  public abstract read(raw_input: string): [BaseCommand, string];
+  public abstract read(rawInput: string): [BaseCommand, string];
 }
 
 
@@ -27,38 +27,75 @@ export class CommandLineReader implements Reader {
     this.registry.register(new LeftCommand())
   }
 
-  private clean_input(raw_input: string): [boolean , string] {
-    return [true, raw_input]
+  private cleanInput(rawInput: string): string {
+    return rawInput
   }
 
-  private validate_input(raw_input: string): [boolean , string[]] {
-    const strings = raw_input.split(" ");
-    if ((strings.length > 0) && (strings.length < 3)) {
-      return [true, strings]
+  private validateInput(cleanInput: string): [boolean , string[]] {
+    const splitInput = cleanInput.split(" ");
+    if ((splitInput.length > 0) && (splitInput.length < 3)) {
+      return [true, splitInput]
     }
-    return [false, strings]
+    return [false, splitInput]
   }
 
-  private process_input(valid_input_arr: string[]): [BaseCommand, string] {
-    const raw_command = valid_input_arr[0];
-    const args = valid_input_arr.length > 1 ? valid_input_arr[1] : "";
-    const command = this.registry.getCommand(raw_command);
+  private processInput(validatedInput: string[]): [BaseCommand, string] {
+    const commandName = validatedInput[0];
+    const args = validatedInput.length > 1 ? validatedInput[1] : "";
+    const command = this.registry.getCommand(commandName);
     return [command, args]
   }
 
-  public read(raw_input: string): [BaseCommand, string] {
-    const [is_clean, cleaned_input] = this.clean_input(raw_input);
+  public read(rawInput: string): [BaseCommand, string] {
+    const cleanedInput = this.cleanInput(rawInput);
+    const [isValid, validatedInput] = this.validateInput(cleanedInput);
 
-    if (is_clean) {
-
-      const [is_valid, validated_input] = this.validate_input(cleaned_input);
-
-      if (is_valid) {
-        return this.process_input(validated_input);
-      }
+    if (isValid) {
+      return this.processInput(validatedInput);
     }
     return [this.registry.getCommand("NULL"), ""]
   }
 }
 
-export default CommandLineReader;
+
+export class CommandRegexParser implements Reader {
+
+  public registry = new CommandRegistry();
+
+  constructor() {
+    this.registry.register(new ReportCommand())
+    this.registry.register(new PlaceCommand())
+    this.registry.register(new MoveCommand())
+    this.registry.register(new RightCommand())
+    this.registry.register(new LeftCommand())
+  }
+
+  private cleanInput(rawInput: string): string {
+    return rawInput
+  }
+
+  private validateInput(cleanInput: string): [boolean , string[]] {
+    const splitInput = cleanInput.split(" ");
+    if ((splitInput.length > 0) && (splitInput.length < 3)) {
+      return [true, splitInput]
+    }
+    return [false, splitInput]
+  }
+
+  private processInput(validatedInput: string[]): [BaseCommand, string] {
+    const commandName = validatedInput[0];
+    const args = validatedInput.length > 1 ? validatedInput[1] : "";
+    const command = this.registry.getCommand(commandName);
+    return [command, args]
+  }
+
+  public read(rawInput: string): [BaseCommand, string] {
+    const cleanedInput = this.cleanInput(rawInput);
+    const [isValid, validatedInput] = this.validateInput(cleanedInput);
+
+    if (isValid) {
+      return this.processInput(validatedInput);
+    }
+    return [this.registry.getCommand("NULL"), ""]
+  }
+}

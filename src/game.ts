@@ -16,14 +16,12 @@ export class Game {
   }
   
   public validMovement(position: Position): boolean {
-    return this.table.is_within_table(position.x, position.y)
+    return this.table.isWithinTable(position.x, position.y)
   }
   
   public updateIfValidMovement(position: Position): void {
-    if (this.table.is_within_table(position.x, position.y)) {
+    if (this.table.isWithinTable(position.x, position.y)) {
       this.robot.updatePosition(position);
     }
   }
 }
-
-export default Game

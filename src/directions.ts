@@ -61,12 +61,12 @@ export class DirectionManager {
     return this.rotate(position, 1)
   }
 
-  public move(moveAmount = 0, position: Position): Position {
+  public move(position: Position): Position {
     const currentDirection = this.getDirection(position.direction);
     const horizontalTranslation = currentDirection.i;
     const verticalTranslation = currentDirection.j;
-    const newX = position.x + horizontalTranslation*moveAmount;
-    const newY = position.y + verticalTranslation*moveAmount;
+    const newX = position.x + horizontalTranslation*this.moveAmount;
+    const newY = position.y + verticalTranslation*this.moveAmount;
     return new Position(newX, newY, currentDirection.name);
   }
   
@@ -95,14 +95,5 @@ export class DirectionManager {
   
   public moveSouth(position: Position): Position {
     return this.moveVertical(position, -1);
-  }
-  
-  public movePosition(position: Position): Position {
-    const currentDirection = this.getDirection(position.direction);
-    const horizontalTranslation = currentDirection.i;
-    const verticalTranslation = currentDirection.j;
-    const newX = position.x + horizontalTranslation*this.moveAmount;
-    const newY = position.y + verticalTranslation*this.moveAmount;
-    return new Position(newX, newY, currentDirection.name);
   }
 }

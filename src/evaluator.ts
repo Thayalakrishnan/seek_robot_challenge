@@ -18,11 +18,8 @@ export class Evaluator {
     if (command.name === "PLACE") {
       command.execute(args, game);
     }
-    else if (game.robot.is_placed) {
+    else if (game.robot.isPlaced) {
       command.execute(args, game);
     }
   }
 }
-
-
-export default Evaluator

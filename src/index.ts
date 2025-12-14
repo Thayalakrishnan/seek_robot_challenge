@@ -14,67 +14,65 @@ function step(commandAsText:string, reader: Reader, evaluator: Evaluator, game: 
   // the evaluator evaluates the command
   evaluator.evaluate(command, args, game);
   //// the renderer outputs the results
-  //renderer.print_frame(game);
+  //renderer.printFrame(game);
 }
 
 
 function main() {
   const reader = new CommandLineReader();
   const evaluator = new Evaluator();
-
   const renderer = new Renderer();
-
   const table = new Table();
   const robot = new Robot();
   const game = new Game(table, robot);
 
   step("PLACE 0,0,EAST", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
 
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
-
-  step("LEFT", reader, evaluator, game);
-  renderer.print_frame(game);
-  
-  step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
-  step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
-  step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
-  step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
 
   step("LEFT", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
+
+  step("LEFT", reader, evaluator, game);
+  renderer.printFrame(game);
+  
+  step("MOVE", reader, evaluator, game);
+  renderer.printFrame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.printFrame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.printFrame(game);
+  step("MOVE", reader, evaluator, game);
+  renderer.printFrame(game);
   
   step("LEFT", reader, evaluator, game);
-  renderer.print_frame(game);  
+  renderer.printFrame(game);  
 
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
   step("MOVE", reader, evaluator, game);
-  renderer.print_frame(game);
+  renderer.printFrame(game);
 
   console.log("Done");
 }
