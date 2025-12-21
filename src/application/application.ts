@@ -12,4 +12,7 @@ export abstract class Application {
   protected abstract renderer: Renderer;
   
   public abstract run(): void;
+  
+  public abstract close(): void;
+  
 }

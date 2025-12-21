@@ -2,7 +2,7 @@ import { Game } from "../../core/game/game.js";
 
 
 export abstract class Renderer {
-  constructor(public game: Game) {}
+  public abstract game: Game;
   
-  abstract render(out: string | void): void;
+  public abstract render(out: string | void): void;
 }

@@ -7,14 +7,14 @@ import { Game } from "../../core/game/game.js";
 export class CLIRenderer extends Renderer{
   private receiver: readline.Interface;
   
-  constructor(game: Game, receiver: readline.Interface) {
-    super(game);
+  constructor(
+    public game: Game, receiver: readline.Interface) {
+    super();
     this.receiver = receiver;
   }
   
   public render(out: string | void): void {
     if (out) {
-      //this.receiver.write(`${out}\n`);
       process.stdout.write(`${out}\n`)
     }
   }

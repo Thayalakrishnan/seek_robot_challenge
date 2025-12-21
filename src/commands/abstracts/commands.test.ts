@@ -6,7 +6,7 @@ import { UnexpectedArgumentsError } from "../../errors/core_errors.js";
 
 // Create a subclass for testing purposes
 // throwing an 
-class TestCommand extends Command {
+export class TestCommand extends Command {
   execute(game: Game): void {
     throw new UnexpectedArgumentsError("TESTING")
   }
