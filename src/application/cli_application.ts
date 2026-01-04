@@ -2,7 +2,7 @@ import { exit } from 'node:process';
 import { Game } from "../core/game/game.js";
 import { ErrorHandler } from "../errors/error_handler.js";
 
-import { Application } from "./application.js";
+import { Application } from "./abstracts/application.js";
 import { CLIReceiver } from "../infrastructure/receivers/cli_receiver.js";
 import { CLIReader } from "../infrastructure/readers/cli_reader.js";
 import { CLIEvaluator } from "../infrastructure/evaluators/cli_evaluator.js";

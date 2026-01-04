@@ -1,4 +1,4 @@
-import { createMockApplication, MockApplication } from "../../tests/mocks/application.mock.js";
+import { createMockApplication, MockApplication } from "../../../tests/mocks/application.mock.js";
 import { Application } from "./application.js";
 
 

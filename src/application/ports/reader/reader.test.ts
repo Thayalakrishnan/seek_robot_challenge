@@ -1,6 +1,6 @@
-import { createMockCommand } from "../../../tests/mocks/command.mock.js";
-import { Command } from "../../commands/abstracts/command.js";
-import { Game } from "../../core/game/game.js";
+import { createMockCommand } from "../../../../tests/mocks/command.mock.js";
+import { Command } from "../../../commands/abstracts/command.js";
+import { Game } from "../../../core/game/game.js";
 import { Reader } from "./reader.js";
 
 

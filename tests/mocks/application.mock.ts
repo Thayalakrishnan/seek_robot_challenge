@@ -1,12 +1,12 @@
-import { Application } from "../../src/application/application.js";
+import { Application } from "../../src/application/abstracts/application.js";
 import { createMockGame } from "./game.mock.js";
 import { createMockEvaluator } from "./evaluator.mock.js";
 import { createMockReader } from "./reader.mock.js";
 import { createMockRenderer } from "./renderer.mock.js";
 import { Game } from "../../src/core/game/game.js";
-import { Reader } from "../../src/application/ports/reader.js";
-import { Evaluator } from "../../src/application/ports/evaluator.js";
-import { Renderer } from "../../src/application/ports/renderer.js";
+import { Reader } from "../../src/application/ports/reader/reader.js";
+import { Evaluator } from "../../src/application/ports/evaluator/evaluator.js";
+import { Renderer } from "../../src/application/ports/renderer/renderer.js";
 
 
 

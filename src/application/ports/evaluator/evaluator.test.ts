@@ -1,5 +1,5 @@
-import { Command } from "../../commands/abstracts/command.js";
-import { Game } from "../../core/game/game.js";
+import { Command } from "../../../commands/abstracts/command.js";
+import { Game } from "../../../core/game/game.js";
 import { Evaluator } from "./evaluator.js";
 
 

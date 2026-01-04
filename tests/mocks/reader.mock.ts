@@ -1,4 +1,4 @@
-import { Reader } from "../../src/application/ports/reader.js";
+import { Reader } from "../../src/application/ports/reader/reader.js";
 import { Command } from "../../src/commands/abstracts/command.js";
 import { Game } from "../../src/core/game/game.js";
 import { createMockCommand } from "./command.mock.js";

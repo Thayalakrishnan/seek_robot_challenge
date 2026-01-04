@@ -58,6 +58,7 @@ run just the unit tests: `npm run test:unit`
 
 run just the ingegration tests:`npm run test:integration`
 
+run unit tests with coverage report: `npm run test:unit -- --coverage`
 
 ## Game Commands
 

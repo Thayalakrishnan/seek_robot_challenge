@@ -1,7 +1,7 @@
-import { Game } from "../core/game/game.js";
-import { Reader } from "./ports/reader.js";
-import { Evaluator } from "./ports/evaluator.js";
-import { Renderer } from "./ports/renderer.js";
+import { Game } from "../../core/game/game.js";
+import { Reader } from "../ports/reader/reader.js";
+import { Evaluator } from "../ports/evaluator/evaluator.js";
+import { Renderer } from "../ports/renderer/renderer.js";
 
 
 export abstract class Application {

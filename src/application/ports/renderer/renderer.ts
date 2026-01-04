@@ -1,4 +1,4 @@
-import { Game } from "../../core/game/game.js";
+import { Game } from "../../../core/game/game.js";
 
 
 export abstract class Renderer {

@@ -1,5 +1,5 @@
 import { Game } from "../../core/game/game.js"
-import { Reader } from "../../application/ports/reader.js"
+import { Reader } from "../../application/ports/reader/reader.js"
 import { Command } from "../../commands/abstracts/command.js"
 import { NoCommandError } from "../../errors/core_errors.js";
 

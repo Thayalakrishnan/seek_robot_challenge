@@ -1,4 +1,4 @@
-import { Renderer } from "../../src/application/ports/renderer.js";
+import { Renderer } from "../../src/application/ports/renderer/renderer.js";
 import { Game } from "../../src/core/game/game.js";
 import { createMockGame } from "./game.mock.js";
 

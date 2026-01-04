@@ -1,5 +1,5 @@
 import { Command } from "../../commands/abstracts/command.js";
-import { Evaluator } from "../../application/ports/evaluator.js";
+import { Evaluator } from "../../application/ports/evaluator/evaluator.js";
 
 
 export class CLIEvaluator extends Evaluator {

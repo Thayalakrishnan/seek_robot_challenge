@@ -2,7 +2,10 @@
   "include": [
     "src/**/*.ts", 
     "tests/**/*.ts"
-, "misc/graphic_renderer.ts", "misc/depricated/parser.test.ts", "misc/depricated/lexer.ts"  ],
+    //"misc/graphic_renderer.ts", 
+    //"misc/depricated/parser.test.ts", 
+    //"misc/depricated/lexer.ts"  
+  ],
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",

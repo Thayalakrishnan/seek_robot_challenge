@@ -1,4 +1,4 @@
-import { Evaluator } from "../../src/application/ports/evaluator.js";
+import { Evaluator } from "../../src/application/ports/evaluator/evaluator.js";
 import { Command } from "../../src/commands/abstracts/command.js";
 import { createMockGame } from "./game.mock.js";
 
