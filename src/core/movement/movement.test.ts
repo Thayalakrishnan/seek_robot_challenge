@@ -1,4 +1,4 @@
-import { InvalidDirectionError } from "../../errors/core_errors.js";
+import { InvalidDirectionUserInputError, UnKnownDirectionError } from "../../errors/core_errors.js";
 import { Position } from "../entities/position/position.js";
 import { Movement } from "./movement.js";
 
@@ -50,13 +50,20 @@ describe('Movement', () => {
       expect(newPosition.direction).toBe("WEST");
     });
 
-    it('should throw an InvalidDirectionError', () => {
+    it('should throw an InvalidDirectionUserInputError', () => {
       expect(() => {
-        const currentPosition = new Position(startX, startY, "INVALID_DIRECTION");
-      }).toThrow(InvalidDirectionError);
-      
-      
+        new Position(startX, startY, "INVALID_DIRECTION");
+      }).toThrow(InvalidDirectionUserInputError);
     });
+    
+    
+    it('should throw an UnKnownDirectionError', () => {
+      const invalidPosition = {x: 1, y: 1, direction: 'UP' } as Position;
+      expect(() => {
+        movement.translate(invalidPosition);
+      }).toThrow(UnKnownDirectionError);
+    });
+    
   });
 
   describe('rotateLeft()', () => {

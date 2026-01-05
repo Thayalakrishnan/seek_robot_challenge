@@ -1,12 +1,12 @@
 import { Position } from "../../core/entities/position/position.js";
 import { Game } from "../../core/game/game.js";
-import { InvalidArgumetnSyntaxError } from "../../errors/core_errors.js";
+import { InvalidArgumentSyntaxUserInputError } from "../../errors/core_errors.js";
 import { Command } from "../abstracts/command.js";
 
 
 export class PlaceCommand extends Command {
-  static regexPattern: RegExp = new RegExp(`^(?<x>\\d+),(?<y>\\d+),(?<direction>[A-Z]+)$`);
-  public supportsArgs: boolean = true;
+  static regexPattern = new RegExp(`^(?<x>\\d+),(?<y>\\d+),(?<direction>[A-Z]+)$`);
+  public supportsArgs = true;
   
   constructor(args = "") {
     super(args, true);
@@ -20,7 +20,7 @@ export class PlaceCommand extends Command {
       const direction = m?.groups.direction;
       return new Position(x, y, direction);
     }
-    throw new InvalidArgumetnSyntaxError(`Cant parse arguments: "${args}".`); 
+    throw new InvalidArgumentSyntaxUserInputError(`${args}`); 
   }
   
   public execute(game: Game): void {

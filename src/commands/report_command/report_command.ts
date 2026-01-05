@@ -4,8 +4,8 @@ import { Command } from "../abstracts/command.js";
 
 export class ReportCommand extends Command {
   public execute(game: Game): string {
-    const position = game.getRobotPosition();
-    const out = `Output: ${position.x},${position.y},${position.direction}`;
+    const position = game.getRobotPositionAsString();
+    const out = `Output: ${position}`;
     return out
   }
 }

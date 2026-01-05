@@ -1,28 +1,25 @@
 import { Position } from "../entities/position/position.js";
+import { RotationType } from "../core.types.js";
+import { ROTATIONS, DIRECTIONS, DIRECTION_KEYS, MOVEMENT_CONF } from "../core.constants.js";
+import { UnKnownDirectionError } from "../../errors/core_errors.js";
 
-
-export enum Directions {
-  EAST,
-  NORTH,
-  WEST,
-  SOUTH,
-}
 
 export class Movement {
   /**
    * class Movement 
    * getter for the robots position 
    * 
-   * @param directions: enum holding the directions. enforces correct turning order
-   * @param numDirections: value to keep track of the total number of directions 
-   * @param rotationStep: size of rotation
-   * @param translationStep: size of translation
+   * @constant directions: enum holding the directions. enforces correct turning order
+   * @constant numDirections: value to keep track of the total number of directions 
+   * @constant rotationStep: size of rotation
+   * @constant translationStep: size of translation
    * @returns none
    */
-  static readonly directions = Directions;
-  private numDirections = 4; 
-  private rotationStep = 1;
-  private translationStep = 1;
+  static readonly directions = DIRECTIONS;
+  
+  private numDirections = MOVEMENT_CONF.NUM_DIRECTIONS; 
+  private rotationStep = MOVEMENT_CONF.STEP_SIZE_ROTATION;
+  private translationStep = MOVEMENT_CONF.STEP_SIZE_TRANSLATION;
 
   /**
    * translate 
@@ -34,27 +31,26 @@ export class Movement {
    */
   public translate(position: Position): Position {
     switch(position.direction) {
-      case "EAST":
+      case DIRECTION_KEYS.EAST:
         return this.translateEast(position);
-      case "NORTH":
+      case DIRECTION_KEYS.NORTH:
         return this.translateNorth(position); 
-      case "WEST":
+      case DIRECTION_KEYS.WEST:
         return this.translateWest(position);
-      case "SOUTH":
+      case DIRECTION_KEYS.SOUTH:
         return this.translateSouth(position);
-      default:
-        return position;
     }
+    throw new UnKnownDirectionError();
   }
 
   /**
-   * getRobotPosition 
+   * rotate 
    * getter for the robots position 
    * 
    * @param position
    * @returns new position
    */
-  private rotate(position: Position, rotationDirection: number): Position {
+  private rotate(position: Position, rotationDirection: RotationType): Position {
     const directionAsNum = Movement.directions[position.direction as keyof typeof Movement.directions];
     const newDirection = (directionAsNum + this.rotationStep*rotationDirection) % this.numDirections;
     const wrappedDirection = newDirection < 0 ? this.numDirections - 1 : newDirection;
@@ -70,7 +66,7 @@ export class Movement {
    * @returns new position
    */
   public rotateRight(position: Position): Position {
-    return this.rotate(position, -1)
+    return this.rotate(position, ROTATIONS.RIGHT)
   }
   
   /**
@@ -82,7 +78,7 @@ export class Movement {
    * @returns new position
    */
   public rotateLeft(position: Position): Position {
-    return this.rotate(position, 1)
+    return this.rotate(position, ROTATIONS.LEFT)
   }
 
   /**

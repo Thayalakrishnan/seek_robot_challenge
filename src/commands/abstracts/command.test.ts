@@ -1,14 +1,14 @@
 import { createMockGame } from "../../../tests/mocks/game.mock.js";
 import { Game } from "../../core/game/game.js";
 import { Command } from "./command.js";
-import { UnexpectedArgumentsError } from "../../errors/core_errors.js";
+import { UnexpectedArgumentsUserInputError } from "../../errors/core_errors.js";
 
 
 // Create a subclass for testing purposes
 // throwing an 
 export class TestCommand extends Command {
   execute(game: Game): void {
-    throw new UnexpectedArgumentsError("TESTING")
+    throw new UnexpectedArgumentsUserInputError("TESTING")
   }
 }
 
@@ -20,16 +20,16 @@ describe('Command Class Unit Tests', () => {
   });
   
   
-  it('should throw an UnexpectedArgumentsError when intialised with arguments', () => {
+  it('should throw an UnexpectedArgumentsUserInputError when intialised with arguments', () => {
     expect(() => {
       new TestCommand("1,2,NORTH");
-    }).toThrow(UnexpectedArgumentsError);
+    }).toThrow(UnexpectedArgumentsUserInputError);
   });
   
-  it('should NOT throw an UnexpectedArgumentsError when intialised with arguments with supportsArgs=true', () => {
+  it('should NOT throw an UnexpectedArgumentsUserInputError when intialised with arguments with supportsArgs=true', () => {
     expect(() => {
       new TestCommand("1,2,NORTH", true);
-    }).not.toThrow(UnexpectedArgumentsError);
+    }).not.toThrow(UnexpectedArgumentsUserInputError);
   });
 
   

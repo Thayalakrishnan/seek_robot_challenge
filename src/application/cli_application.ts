@@ -8,21 +8,24 @@ import { CLIReader } from "../infrastructure/readers/cli_reader.js";
 import { CLIEvaluator } from "../infrastructure/evaluators/cli_evaluator.js";
 import { CLIRenderer } from "../infrastructure/renderers/cli_renderer.js";
 
-export class CLIApplication extends Application{
-  game = new Game();
+import { CommandManager } from '../command_manager/command_manager.js';
+
+
+export class CLIApplication extends Application {
+  public game = new Game();
+  public commandManager = new CommandManager();
   
-  protected override reader = new CLIReader(this.game);
+  protected override reader = new CLIReader(this.commandManager);
   protected override evaluator = new CLIEvaluator(this.game);
   protected receiver  = new CLIReceiver();
   protected override renderer = new CLIRenderer(this.game, this.receiver);
   
   constructor() {
     super();
-    this.setupReceiver(); 
   }
   
   public run(): void {
-    this.receiver.open()
+    this.setupReceiver(); 
   }
   
   public close(): void {
@@ -33,9 +36,8 @@ export class CLIApplication extends Application{
     this.receiver.on('line', (rawInput) => {
       try {
         const command = this.reader.read(rawInput);
-        const out = this.evaluator.evaluate(command);
-        this.renderer.render(out);
-        this.receiver.open();
+        const result = this.evaluator.evaluate(command);
+        this.renderer.render(result);
       }
       catch (error) {
         const isExit = ErrorHandler(error);

@@ -3,7 +3,7 @@ import { LeftCommand } from "../../src/commands/left_command/left_command.js";
 import { MoveCommand } from "../../src/commands/move_command/move_command.js";
 import { PlaceCommand } from "../../src/commands/place_command/place_command.js";
 import { ReportCommand } from "../../src/commands/report_command/report_command.js";
-import { InvalidArgumetnSyntaxError } from "../../src/errors/core_errors.js";
+import { InvalidArgumentSyntaxUserInputError, UnPlacedRobotError } from "../../src/errors/core_errors.js";
 
 
 describe('Game Command Integration Tests', () => {
@@ -36,12 +36,16 @@ describe('Game Command Integration Tests', () => {
     expect(out).toBe("Output: 2,2,NORTH");
   });
 
-  it('should ignore movement/rotation commands if not placed, then execute PLACE', () => {
+  it('should throw an UnPlacedRobotError when movement commands are carried out before a valid PLACE command', () => {
+    
     // execute move command and show that the robot hasnt moved
     expect(game.isActive).toBe(false);
-    executeCommand(MoveCommand);
-    const out = executeCommand(ReportCommand);
-    expect(out).toBe("Output: -1,-1,");
+    //const out = executeCommand(ReportCommand);
+    //expect(out).toBe("Output: -1,-1,");
+    
+    expect(() => {
+      executeCommand(MoveCommand);
+    }).toThrow(UnPlacedRobotError);
 
     // place the robot
     executeCommand(PlaceCommand, "0,0,SOUTH");
@@ -76,7 +80,7 @@ describe('Game Command Integration Tests', () => {
     executeCommand(PlaceCommand, "2,2,SOUTH");
     expect(() => {
       executeCommand(PlaceCommand, "1,2");
-    }).toThrow(InvalidArgumetnSyntaxError);
+    }).toThrow(InvalidArgumentSyntaxUserInputError);
 
     // Verify position is unchanged
     const out = executeCommand(ReportCommand);

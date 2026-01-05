@@ -2,7 +2,7 @@ import { createMockGame } from "../../../tests/mocks/game.mock.js";
 import { Position } from "../../core/entities/position/position.js";
 import { Game } from "../../core/game/game.js";
 import { PlaceCommand } from "./place_command.js";
-import { InvalidDirectionError, UnknownCommandError, UnexpectedArgumentsError, InvalidArgumetnSyntaxError } from "../../errors/core_errors.js";
+import { InvalidDirectionUserInputError, NoArgumentProvidedUserInputError, UnknownCommandUserInputError, UnexpectedArgumentsUserInputError, InvalidArgumentSyntaxUserInputError } from "../../errors/core_errors.js";
 
 
 describe('PlaceCommand Unit Tests', () => {
@@ -15,11 +15,18 @@ describe('PlaceCommand Unit Tests', () => {
     jest.clearAllMocks();
   });
 
+  
   describe('Argument Parsing Tests', () => {
     let command: PlaceCommand;
 
     beforeEach(() => {
       command = new PlaceCommand("0,0,EAST");
+    });
+    
+    it('should throw an NoArgumentProvidedUserInputError when initialised with no argument', () => {
+      expect(() => {
+        new PlaceCommand();
+      }).toThrow(NoArgumentProvidedUserInputError);
     });
 
     it('should correctly parse valid coordinates and direction', () => {
@@ -41,31 +48,31 @@ describe('PlaceCommand Unit Tests', () => {
       expect(position.direction).toBe("EAST");
     });
 
-    it('should throw an InvalidDirectionError error', () => {
+    it('should throw an InvalidDirectionUserInputError error', () => {
       expect(() => {
         const position = command.parseArgs("3,3,NORTHWEST");
-      }).toThrow(InvalidDirectionError);
+      }).toThrow(InvalidDirectionUserInputError);
     });
 
     it('should throw an error for input missing a direction', () => {
       const invalidArgs = "1,2";
       expect(() => {
         command.parseArgs(invalidArgs);
-      }).toThrow(InvalidArgumetnSyntaxError);
+      }).toThrow(InvalidArgumentSyntaxUserInputError);
     });
 
     it('should throw an error for non-numeric coordinates', () => {
       const invalidArgs = "1,A,NORTH";
       expect(() => {
         command.parseArgs(invalidArgs);
-      }).toThrow(InvalidArgumetnSyntaxError);
+      }).toThrow(InvalidArgumentSyntaxUserInputError);
     });
 
     it('should throw an error for too many arguments', () => {
       const invalidArgs = "1,2,NORTH,EXTRA";
       expect(() => {
         command.parseArgs(invalidArgs);
-      }).toThrow(InvalidArgumetnSyntaxError);
+      }).toThrow(InvalidArgumentSyntaxUserInputError);
     });
   });
 
@@ -88,12 +95,14 @@ describe('PlaceCommand Unit Tests', () => {
     });
 
     it('should allow the parsing error to bubble up when executed', () => {
+      const invalidArgs = "BAD_ARGS";
       const command = new PlaceCommand("0,0,EAST");
       const mockGame = createMockGame();
-      command.args = "BAD_ARGS";
+      
+      command.args = invalidArgs;
       expect(() => {
         command.execute(mockGame);
-      }).toThrow(`Cant parse arguments: "BAD_ARGS".`);
+      }).toThrow(invalidArgs);
 
       expect(mockGame.setRobotPosition).not.toHaveBeenCalled();
     });

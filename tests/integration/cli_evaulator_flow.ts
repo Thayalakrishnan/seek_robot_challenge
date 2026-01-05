@@ -1,7 +1,7 @@
 import { Game } from "../../src/core/game/game.js";
 import { PlaceCommand } from "../../src/commands/place_command/place_command.js";
 import { MoveCommand } from "../../src/commands/move_command/move_command.js";
-import { CLIParser } from "../../src/infrastructure/readers/cli/cli_parser.js";
+import { CLIEvaluator } from "../../src/infrastructure/evaluators/cli_evaluator.js";
 
 
 describe('Infrastructure Integration Tests', () => {
@@ -12,22 +12,22 @@ describe('Infrastructure Integration Tests', () => {
     game = new Game(); 
   });
 
-  describe('CLIParser State Management', () => {
-    let parser: CLIParser;
+  describe('CLIEvaluator evaluate method', () => {
+    let evaluator: CLIEvaluator;
 
     beforeEach(() => {
-      parser = new CLIParser(game);
+      evaluator = new CLIEvaluator(game);
     });
 
     it('should return PLACE command in the initial (idle) state', () => {
       game.isActive = false;
       
       // Should succeed
-      expect(parser.parse("PLACE", "1,1,NORTH")).toBeInstanceOf(PlaceCommand);
+      expect(evaluator.evaluate("PLACE", "1,1,NORTH")).toBeInstanceOf(PlaceCommand);
 
       // Should fail
       expect(() => {
-        parser.parse("MOVE", "");
+        evaluator.evaluate("MOVE", "");
       }).toThrow('Command "MOVE" is not recognized or available in the current state.');
     });
 
@@ -36,10 +36,10 @@ describe('Infrastructure Integration Tests', () => {
       game.isActive = true;
 
       // Should succeed
-      expect(parser.parse("MOVE", "")).toBeInstanceOf(MoveCommand);
+      expect(evaluator.evaluate("MOVE", "")).toBeInstanceOf(MoveCommand);
 
       // Should succeed
-      expect(parser.parse("PLACE", "0,0,EAST")).toBeInstanceOf(PlaceCommand);
+      expect(evaluator.evaluate("PLACE", "0,0,EAST")).toBeInstanceOf(PlaceCommand);
     });
   });
 });

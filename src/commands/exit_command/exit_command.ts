@@ -5,6 +5,6 @@ import { Command } from "../abstracts/command.js";
 
 export class ExitCommand extends Command {
   public execute(game: Game): void {
-    throw new ExitApplicationError(`Exiting Application`);
+    throw new ExitApplicationError();
   }
 }

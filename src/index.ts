@@ -1,7 +1,7 @@
 import { CLIApplication } from "./application/cli_application.js";
 
 
-async function main() {
+export async function main() {
   const app = new CLIApplication();
   app.run();
 }
