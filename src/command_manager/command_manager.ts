@@ -8,8 +8,9 @@ import { MoveCommand } from "../commands/move_command/move_command.js";
 import { PlaceCommand } from "../commands/place_command/place_command.js";
 import { ReportCommand } from "../commands/report_command/report_command.js";
 import { ExitCommand } from "../commands/exit_command/exit_command.js";
-import { UnknownCommandUserInputError } from "../errors/core_errors.js";
+import { AddobsCommand } from "../commands/addobs_command/addobs_command.js";
 
+import { UnknownCommandUserInputError } from "../errors/core_errors.js";
 import { CommandConstructor, CommandRegistry } from "./command_manager.types.js"
 
 
@@ -23,6 +24,7 @@ export class CommandManager {
     this.register(COMMANDS.RIGHT, RightCommand);
     this.register(COMMANDS.MOVE, MoveCommand);
     this.register(COMMANDS.REPORT, ReportCommand);
+    this.register(COMMANDS.ADDOBS, AddobsCommand);
   }
   
   /**

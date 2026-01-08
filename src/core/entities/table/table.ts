@@ -1,4 +1,4 @@
-import { Position } from "../position/position.js";
+import { Coordinate } from "../coordinate/coordinate.js";
 
 
 export class Table {
@@ -25,10 +25,10 @@ export class Table {
    * @param position - position object to check against
    * @returns boolean - true if within / false if not 
    */
-  public isWithinTable(position: Position): boolean {
+  public isWithinTable(coordinate: Coordinate): boolean {
     return (
-      (position.x >= 0) && (position.x < this.width) &&
-      (position.y >= 0) && (position.y < this.depth)
+      (coordinate.x >= 0) && (coordinate.x < this.width) &&
+      (coordinate.y >= 0) && (coordinate.y < this.depth)
     )
   }
 }

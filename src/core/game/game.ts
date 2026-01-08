@@ -1,10 +1,13 @@
 import { UnPlacedRobotError } from "../../errors/core_errors.js";
 import { GAME_STATES } from "../core.constants.js";
 import { GameStateType } from "../core.types.js";
+import { Coordinate } from "../entities/coordinate/coordinate.js";
+import { Obstacle } from "../entities/obstacle/obstacles.js";
 import { Position } from "../entities/position/position.js";
 import { Robot } from "../entities/robot/robot.js";
 import { Table } from "../entities/table/table.js";
 import { Movement } from "../movement/movement.js";
+
 
 
 export class Game {
@@ -27,7 +30,9 @@ export class Game {
     public table = new Table(), 
     public robot = new Robot(),
     private movement = new Movement(),
-    ) {}
+    public obstacles: Obstacle[] = [], 
+    ) {
+    }
 
   /**
    * function isValidPosition 
@@ -40,6 +45,16 @@ export class Game {
     return this.table.isWithinTable(position);
   }
   
+  
+  private hasObstacles(coordinate: Coordinate): boolean {
+    const isObstacle = this.obstacles.find((obs) => coordinate.x === obs.coordinate.x && coordinate.y === obs.coordinate.y);
+    if (isObstacle) {
+      process.stdout.write("obstacle in the way\n");
+      return true
+    }
+    return false
+  }
+  
   /**
    * function updateIfValidPosition 
    * melds the valid postion function with the robots update positin method
@@ -50,7 +65,8 @@ export class Game {
    * @returns none
    */
   private updateIfValidPosition(position: Position): void {
-    if (this.isValidPosition(position)) {
+    
+    if (this.isValidPosition(position) && !this.hasObstacles(position)) {
       this.robot.updatePosition(position);
       this.isActive = true;
       this.currentState = GAME_STATES.ACTIVE;
@@ -138,6 +154,14 @@ export class Game {
    */
   public setRobotPosition(position: Position): void {
     this.updateIfValidPosition(position);
+  }
+  
+  
+  public addObstacle(obstacle: Obstacle): void {
+    if ((!this.isActive) && (this.table.isWithinTable(obstacle.coordinate) && !this.hasObstacles(obstacle.coordinate))) {
+      process.stdout.write("obstacle added!\n");
+      this.obstacles.push(obstacle);
+    }
   }
   
 }

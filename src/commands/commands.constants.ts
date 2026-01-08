@@ -4,5 +4,6 @@ export const COMMANDS = {
   RIGHT: 'RIGHT',
   LEFT: 'LEFT',
   EXIT: 'EXIT',
+  ADDOBS: 'ADDOBS',
   REPORT: 'REPORT',
 } as const;
