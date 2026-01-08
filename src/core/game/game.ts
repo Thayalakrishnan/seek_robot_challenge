@@ -1,3 +1,6 @@
+import { UnPlacedRobotError } from "../../errors/core_errors.js";
+import { GAME_STATES } from "../core.constants.js";
+import { GameStateType } from "../core.types.js";
 import { Position } from "../entities/position/position.js";
 import { Robot } from "../entities/robot/robot.js";
 import { Table } from "../entities/table/table.js";
@@ -17,6 +20,8 @@ export class Game {
    * @param movement - ref to the movement manager
    * @returns none
    */
+  public currentState: GameStateType = GAME_STATES.IDLE;
+  
   constructor(
     public isActive = false,
     public table = new Table(), 
@@ -48,12 +53,18 @@ export class Game {
     if (this.isValidPosition(position)) {
       this.robot.updatePosition(position);
       this.isActive = true;
+      this.currentState = GAME_STATES.ACTIVE;
     }
   }
   
+  private checkIfActive(): void {
+    if (!this.isActive) {
+      throw new UnPlacedRobotError();
+    }
+  }
 
   /**
-   * function moveRobot 
+   * function moveRobot [MOVE]
    * move the robot a set amount
    * used the movement manager 
    * 
@@ -61,47 +72,65 @@ export class Game {
    * @returns none
    */
   public moveRobot(): void {
+    this.checkIfActive();
     const newPosition = this.movement.translate(this.robot.position);
     this.updateIfValidPosition(newPosition);
   }
 
   /**
-   * rotateRobotLeft 
+   * rotateRobotLeft [LEFT]
    * rotate the robot using the movement manager 
    * 
    * @param none
    * @returns none
    */
   public rotateRobotLeft(): void {
+    this.checkIfActive();
     const newPosition = this.movement.rotateLeft(this.robot.position);
     this.robot.updatePosition(newPosition);
   }
 
   /**
-   * rotateRobotRight 
+   * rotateRobotRight [RIGHT]
    * rotate the robot using the movement manager 
    * 
    * @param none
    * @returns none
    */
   public rotateRobotRight(): void {
+    this.checkIfActive();
     const newPosition = this.movement.rotateRight(this.robot.position);
     this.robot.updatePosition(newPosition);
   }
   
   /**
-   * getRobotPosition 
+   * getRobotPosition [REPORT]
    * getter for the robots position 
    * 
-   * @param position
-   * @returns none
+   * @param none
+   * @returns string value of the robots position
    */
   public getRobotPosition(): Position {
+    this.checkIfActive();
     return this.robot.position
+  }
+  
+  /**
+   * getRobotPositionAsString [REPORT]
+   * getter for the robots position 
+   * 
+   * @param none
+   * @returns string value of the robots position
+   */
+  public getRobotPositionAsString(): string {
+    this.checkIfActive();
+    const position = this.getRobotPosition();
+    const position_as_string = `${position.x},${position.y},${position.direction}`;
+    return position_as_string
   }
 
   /**
-   * setRobotPosition 
+   * setRobotPosition [PLACE]
    * setter for the robots position 
    * 
    * @param position

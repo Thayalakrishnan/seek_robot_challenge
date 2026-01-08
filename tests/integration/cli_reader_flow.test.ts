@@ -1,21 +1,20 @@
+import { CommandManager } from "../../src/command_manager/command_manager.js";
 import { PlaceCommand } from "../../src/commands/place_command/place_command.js";
-import { Game } from "../../src/core/game/game.js";
 import { CLIReader } from "../../src/infrastructure/readers/cli_reader.js";
 
 
 describe('Infrastructure Integration Tests', () => {
-  
-  let game: Game;
+  let commandManager: CommandManager;
 
   beforeEach(() => {
-    game = new Game(); 
+    commandManager = new CommandManager(); 
   });
 
   describe('CLIReader Flow', () => {
     let reader: CLIReader;
 
     beforeEach(() => {
-      reader = new CLIReader(game);
+      reader = new CLIReader(commandManager);
       jest.clearAllMocks();
     });
 

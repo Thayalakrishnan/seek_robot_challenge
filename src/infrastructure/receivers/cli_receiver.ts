@@ -3,6 +3,12 @@ import { stdin as input, stdout as output, exit } from 'node:process';
 
 
 export class CLIReceiver extends readline.Interface {
+  /**
+   * CLIReceiver
+   * 
+   * We are extending/wrapping the readline.Interface
+   * so that we can standardise the methods being used
+   */
   
   constructor() {
     super({input, output, prompt: ""});
@@ -19,6 +25,6 @@ export class CLIReceiver extends readline.Interface {
   }
   
   public open(): void {
-    this.prompt();
+    //
   };
 }

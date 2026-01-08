@@ -3,6 +3,8 @@
     "src/**/*.ts", 
     "tests/**/*.ts"
     //"misc/graphic_renderer.ts", 
+    //"misc/command_result.ts"    
+    //"tests/e2e/block/launch_helper.ts",
     //"misc/depricated/parser.test.ts", 
     //"misc/depricated/lexer.ts"  
   ],

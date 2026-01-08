@@ -13,7 +13,7 @@ export class Robot {
    * @returns none
    */
   constructor(
-    public position: Position = new Position(-1, -1, ""),
+    public position: Position = new Position(-1, -1, "NORTH"),
     public isPlaced = false
   ) {}
   

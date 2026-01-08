@@ -54,9 +54,11 @@ Get-Content -Raw ".\test_data\example1.txt" | npm run dev
 
 run the entire test suite: `npm run test`
 
-run just the unit tests: `npm run test:unit`
+run the unit tests: `npm run test:unit`
 
-run just the ingegration tests:`npm run test:integration`
+run the ingegration tests:`npm run test:integration`
+
+run the end-to-end tests:`npm run test:e2e`
 
 run unit tests with coverage report: `npm run test:unit -- --coverage`
 
@@ -70,8 +72,6 @@ run unit tests with coverage report: `npm run test:unit -- --coverage`
 | `RIGHT` | rotates robot in place, clockwise 90 degrees |
 | `REPORT` | outputs the robots current position as: `Output: X,Y,DIRECTION` |
 | `EXIT` | exits the application. note you can only `EXIT` once the robot has been placed |
-| `NULL` | blank command used to catch errors |
-
 
 ## Design considerations and application structure
 
@@ -100,7 +100,6 @@ run unit tests with coverage report: `npm run test:unit -- --coverage`
 ## Error Handling
 - Errors are thrown through out the application and are handled at in the top level CLI Applications run command
 - Errors are handled gracefully 
-
 
 ## Testing
 - unit tests cover the core modules and the commands

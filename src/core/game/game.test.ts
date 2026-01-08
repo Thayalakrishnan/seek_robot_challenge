@@ -41,7 +41,7 @@ describe('Game', () => {
     });
 
     it('should NOT update position, keep isActive=false, and ignore Robot update if position is invalid', () => {
-      const inValidPosition = new Position(5, 5, "NORTH");
+      const inValidPosition = new Position(5, 5, "SOUTH");
       game.setRobotPosition(inValidPosition);
 
       expect(game.isActive).toBe(false);
