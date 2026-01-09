@@ -12,6 +12,7 @@ import { AddobsCommand } from "../commands/addobs_command/addobs_command.js";
 
 import { UnknownCommandUserInputError } from "../errors/core_errors.js";
 import { CommandConstructor, CommandRegistry } from "./command_manager.types.js"
+import { PathtoCommand } from "../commands/pathto_command/pathto_command.js";
 
 
 export class CommandManager {
@@ -25,6 +26,7 @@ export class CommandManager {
     this.register(COMMANDS.MOVE, MoveCommand);
     this.register(COMMANDS.REPORT, ReportCommand);
     this.register(COMMANDS.ADDOBS, AddobsCommand);
+    this.register(COMMANDS.PATHTO, PathtoCommand);
   }
   
   /**

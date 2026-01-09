@@ -164,4 +164,81 @@ export class Game {
     }
   }
   
+  /**
+   * check if the current coodintate is valid
+   * - check that it is within the table
+   * - check that there is no obstructions
+   */
+  private isValid(coordinate: Coordinate, visited: Coordinate[]) {
+    // If cell lies out of bounds
+    if (!this.table.isWithinTable(coordinate)) {
+      return false;
+    }
+    
+    // if there are obstacles in the way
+    if (this.hasObstacles(coordinate)) {
+      return false;
+    }
+    
+    // If cell is already visited
+    const hasVisited = visited.find((coor) => coordinate.x === coor.x && coordinate.y === coor.y);
+    if (hasVisited) {
+      return false;
+    }
+    return true;
+  }
+  
+  public findPath(to: Coordinate): string {
+    const from = new Coordinate(this.robot.position.x, this.robot.position.y);
+    const queue: Array<Coordinate[]> = [[from]];
+    const visitedNodes: Coordinate[] = [from];
+    let goodPath: Coordinate[] = [];
+    
+    while(queue.length > 0) {
+      
+      const previousNodes = queue.shift();
+      
+      if (!previousNodes) {
+        break;
+      }
+      
+      const currentNode = previousNodes.at(-1);
+      if (!currentNode) {
+        break;
+      }
+      
+      // found a path
+      if (currentNode.x === to.x && currentNode.y === to.y) {
+        goodPath = [...previousNodes]
+        break
+      }
+      
+      // check each surrounding node
+      const northNode = new Coordinate(currentNode.x, currentNode.y + 1);
+      const eastNode = new Coordinate(currentNode.x + 1, currentNode.y);
+      const southNode = new Coordinate(currentNode.x, currentNode.y - 1);
+      const westNode = new Coordinate(currentNode.x - 1, currentNode.y);
+      
+      const nodes = [northNode, eastNode, southNode, westNode];
+      
+      nodes.forEach((nextNode) => {
+        if (this.isValid(nextNode, visitedNodes)) {
+          previousNodes.push(nextNode);
+          queue.push([...previousNodes]);
+          visitedNodes.push(nextNode);
+        }
+      })
+    }
+    
+    if (goodPath.length) {
+      let fullPath = `Path length: ${goodPath.length}\n`;
+      fullPath += goodPath.map((node) => `(${node.x},${node.y})`).join(",")
+      return fullPath
+    }
+    
+    // no path found
+    return "No path found"
+  }
+  
+  
 }

@@ -5,5 +5,6 @@ export const COMMANDS = {
   LEFT: 'LEFT',
   EXIT: 'EXIT',
   ADDOBS: 'ADDOBS',
+  PATHTO: 'PATHTO',
   REPORT: 'REPORT',
 } as const;
